@@ -7,26 +7,38 @@
 // score function
 // crash/end game function
 
-const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
-// Set canvas height and width
-canvas.height = 500;
-canvas.width = 1000;
-
-let apples = [];
-
-let snake = {
-  // Snake head dimensions
-  headX: 100,
-  headY: 75,
-  headRadius: 15,
-  headColour: `#C46200`,
-  // Snake tail dimensions
-  tailX: 75,
-  tailY: 75,
-  tailRadius: 12,
-  tailColour: `#964B00`,
+// Start A new game
+let startGame = function () {
+  newGame.start();
+  let snake = new Snake(100, 75, 15, "brown");
 };
+
+// Create a new game
+const newGame = {
+  canvas: document.createElement("canvas"),
+  container: document.querySelector(".container"),
+  start: function () {
+    this.canvas.width = 1000;
+    this.canvas.height = 500;
+    this.ctx = this.canvas.getContext("2d");
+    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    this.container.setAttribute("style", "display: none;");
+  },
+};
+
+// Create the snake object
+function Snake(x, y, radius, color) {
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+  ctx = newGame.ctx;
+  ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+  ctx.strokeStyle = color;
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
 // Generate a random number between to values, inclusive
 let getRandomNum = function (min, max) {
   let randomNum = Math.floor(Math.random() * (max - min + 1) + min);
@@ -34,24 +46,56 @@ let getRandomNum = function (min, max) {
 };
 
 // Draw head of the snake
-let drawHead = function () {
-  ctx.beginPath();
-  ctx.arc(snake.headX, snake.headY, snake.headRadius, 0, 2 * Math.PI);
-  ctx.strokeStyle = snake.headColour;
-  ctx.stroke();
-  ctx.fillStyle = snake.headColour;
-  ctx.fill();
-};
+// let drawHead = function () {
+//   ctx.beginPath();
+//   ctx.arc(snake.headX, snake.headY, snake.headRadius, 0, 2 * Math.PI);
+//   ctx.strokeStyle = snake.headColour;
+//   ctx.stroke();
+//   ctx.fillStyle = snake.headColour;
+//   ctx.fill();
+// };
 
-// Draw head of the snake
-let drawTail = function () {
-  ctx.beginPath();
-  ctx.arc(snake.tailX, snake.tailY, snake.tailRadius, 0, 2 * Math.PI);
-  ctx.strokeStyle = snake.tailColour;
-  ctx.stroke();
-  ctx.fillStyle = snake.tailColour;
-  ctx.fill();
-};
+// // Draw head of the snake
+// let drawTail = function () {
+//   ctx.beginPath();
+//   ctx.arc(snake.tailX, snake.tailY, snake.tailRadius, 0, 2 * Math.PI);
+//   ctx.strokeStyle = snake.tailColour;
+//   ctx.stroke();
+//   ctx.fillStyle = snake.tailColour;
+//   ctx.fill();
+// };
+// let move = function () {
+//   let xSpeed = scale * 1;
+//   let ySpeed = 0;
+//   snake.headX += xSpeed;
+//   snake.headY += ySpeed;
+// };
 
-drawHead();
-drawTail();
+let changeDirection = function (direction) {
+  switch (direction) {
+    case "Up":
+      xSpeed = 0;
+      ySpeed = -scale * 1;
+      break;
+    case "Down":
+      xSpeed = 0;
+      ySpeed = scale * 1;
+      break;
+    case "Left":
+      xSpeed = -scale * 1;
+      ySpeed = 0;
+      break;
+    case "Right":
+      xSpeed = scale * 1;
+      ySpeed = 0;
+      break;
+  }
+};
+// drawHead();
+// drawTail();
+
+window.addEventListener("keydown", (e) => {
+  const direction = e.key.replace("Arrow", "");
+  console.log(direction);
+  changeDirection(direction);
+});

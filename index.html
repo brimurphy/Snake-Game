@@ -11,12 +11,36 @@
       }
       canvas {
         background-color: #fff;
+        transform: translate(25%, 25%);
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .container {
+        width: 1000px;
+        height: 500px;
+        position: relative;
+        transform: translate(25%, 25%);
+      }
+
+      .center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
       }
     </style>
   </head>
   <body>
-    <canvas id="myCanvas"></canvas>
-
+    <h1>Snake Game</h1>
+    <section class="container">
+      <div class="center">
+        <button onclick="startGame()">Start Game</button>
+      </div>
+    </section>
     <script src="main.js"></script>
   </body>
 </html>
