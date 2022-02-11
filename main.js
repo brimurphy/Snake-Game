@@ -9,12 +9,12 @@
 
 // Start A new game
 let startGame = function () {
-  newGame.start();
-  let snake = new Snake(100, 75, 15, "brown");
+  snake = new snake(100, 75, 15, "brown");
+  myGame.start();
 };
 
-// Create a new game
-const newGame = {
+// Create a new game object
+const myGame = {
   canvas: document.createElement("canvas"),
   container: document.querySelector(".container"),
   start: function () {
@@ -23,22 +23,34 @@ const newGame = {
     this.ctx = this.canvas.getContext("2d");
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     this.container.setAttribute("style", "display: none;");
+    this.interval = setInterval(movement, 20);
+  },
+  clear: function () {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   },
 };
 
-// Create the snake object
-function Snake(x, y, radius, color) {
+// Create a snake constructor object
+function snake(x, y, radius, color) {
   this.x = x;
   this.y = y;
   this.radius = radius;
-  ctx = newGame.ctx;
-  ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-  ctx.strokeStyle = color;
-  ctx.stroke();
-  ctx.fillStyle = color;
-  ctx.fill();
+  this.move = function () {
+    ctx = myGame.ctx;
+    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    ctx.strokeStyle = color;
+    ctx.stroke();
+    ctx.fillStyle = color;
+    ctx.fill();
+  };
 }
 
+// Add movement to object
+let movement = function () {
+  myGame.clear();
+  snake.x += 1;
+  snake.move();
+};
 // Generate a random number between to values, inclusive
 let getRandomNum = function (min, max) {
   let randomNum = Math.floor(Math.random() * (max - min + 1) + min);
@@ -91,8 +103,6 @@ let changeDirection = function (direction) {
       break;
   }
 };
-// drawHead();
-// drawTail();
 
 window.addEventListener("keydown", (e) => {
   const direction = e.key.replace("Arrow", "");
