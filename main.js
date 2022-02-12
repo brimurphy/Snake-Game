@@ -7,105 +7,154 @@
 // score function
 // crash/end game function
 
-// Start A new game
-let startGame = function () {
-  snake = new snake(100, 75, 15, "brown");
-  myGame.start();
-};
+const canvas = document.getElementById("myCanvas");
+canvas.width = 500;
+canvas.height = 500;
+const ctx = canvas.getContext("2d");
 
-// Create a new game object
-const myGame = {
-  canvas: document.createElement("canvas"),
-  container: document.querySelector(".container"),
-  start: function () {
-    this.canvas.width = 1000;
-    this.canvas.height = 500;
-    this.ctx = this.canvas.getContext("2d");
-    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-    this.container.setAttribute("style", "display: none;");
-    this.interval = setInterval(movement, 20);
-  },
-  clear: function () {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  },
-};
+// Movement
+let speed = 5;
+let xSpeed = 0;
+let ySpeed = 0;
 
-// Create a snake constructor object
-function snake(x, y, radius, color) {
-  this.x = x;
-  this.y = y;
-  this.radius = radius;
-  this.move = function () {
-    ctx = myGame.ctx;
-    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-    ctx.strokeStyle = color;
-    ctx.stroke();
-    ctx.fillStyle = color;
-    ctx.fill();
-  };
+// Layout of playing area
+let columns = 20;
+let columnSize = canvas.width / columns - 5;
+
+// Snake
+let snakeHeadX = 5;
+let snakeHeadY = 5;
+let snakeRadius = canvas.width / columns - 10;
+let snakeColor = "brown";
+
+function playGame() {
+  clear();
+  snake();
+  // Set speed of snake
+  setTimeout(playGame, 1000 / speed);
 }
 
-// Add movement to object
-let movement = function () {
-  myGame.clear();
-  snake.x += 1;
-  snake.move();
-};
-// Generate a random number between to values, inclusive
-let getRandomNum = function (min, max) {
-  let randomNum = Math.floor(Math.random() * (max - min + 1) + min);
-  return randomNum;
-};
+function clear() {
+  ctx.beginPath();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.closePath();
+}
 
-// Draw head of the snake
-// let drawHead = function () {
-//   ctx.beginPath();
-//   ctx.arc(snake.headX, snake.headY, snake.headRadius, 0, 2 * Math.PI);
-//   ctx.strokeStyle = snake.headColour;
+function snake() {
+  ctx.fillStyle = snakeColor;
+  ctx.strokeStyle = snakeColor;
+  ctx.arc(
+    snakeHeadX * columns,
+    snakeHeadY * columns,
+    snakeRadius,
+    0,
+    2 * Math.PI
+  );
+  ctx.fill();
+  ctx.stroke();
+}
+
+playGame();
+
+// // Start A new game
+// let startGame = function () {
+//   snake = new snake(100, 75, 15, "brown");
+//   myGame.start();
+// };
+
+// // Create a new game object
+// const myGame = {
+//   canvas: document.createElement("canvas"),
+//   container: document.querySelector(".container"),
+//   start: function () {
+//     this.canvas.width = 400;
+//     this.canvas.height = 400;
+//     this.ctx = this.canvas.getContext("2d");
+//     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+//     this.container.setAttribute("style", "display: none;");
+//     this.interval = setInterval(movement, 20);
+//   },
+//   // Clear previous position of the snake
+//   clear: function () {
+//     this.ctx.beginPath();
+//     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+//     this.ctx.closePath();
+//   },
+// };
+
+// // Create a snake constructor object
+// function snake(x, y, radius, color) {
+//   this.x = x;
+//   this.y = y;
+//   this.color = color;
+//   this.radius = radius;
+//   this.xSpeed = 0;
+//   this.ySpeed = 0;
+//   // this.move = function () {
+//   ctx = myGame.ctx;
+//   ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+//   ctx.fillStyle = this.color;
 //   ctx.stroke();
-//   ctx.fillStyle = snake.headColour;
-//   ctx.fill();
+//   // };
+//   this.newPos = function () {
+//     this.x += this.speedX;
+//     this.y += this.speedY;
+//   };
+// }
+
+// // Add movement to object
+// let movement = function () {
+//   // Clear the last position of the object
+//   myGame.clear();
+//   snake.newPos();
+//   // snake.move();
+// };
+// // Generate a random number between to values, inclusive
+// let getRandomNum = function (min, max) {
+//   let randomNum = Math.floor(Math.random() * (max - min + 1) + min);
+//   return randomNum;
 // };
 
-// // Draw head of the snake
-// let drawTail = function () {
-//   ctx.beginPath();
-//   ctx.arc(snake.tailX, snake.tailY, snake.tailRadius, 0, 2 * Math.PI);
-//   ctx.strokeStyle = snake.tailColour;
-//   ctx.stroke();
-//   ctx.fillStyle = snake.tailColour;
-//   ctx.fill();
+// let moveUp = function () {
+//   snake.ySpeed -= 1;
 // };
-// let move = function () {
-//   let xSpeed = scale * 1;
-//   let ySpeed = 0;
-//   snake.headX += xSpeed;
-//   snake.headY += ySpeed;
+// let moveDown = function () {
+//   snake.ySpeed += 1;
+// };
+// let moveLeft = function () {
+//   snake.xSpeed -= 1;
+// };
+// let moveRight = function () {
+//   snake.xSpeed += 1;
 // };
 
-let changeDirection = function (direction) {
-  switch (direction) {
-    case "Up":
-      xSpeed = 0;
-      ySpeed = -scale * 1;
-      break;
-    case "Down":
-      xSpeed = 0;
-      ySpeed = scale * 1;
-      break;
-    case "Left":
-      xSpeed = -scale * 1;
-      ySpeed = 0;
-      break;
-    case "Right":
-      xSpeed = scale * 1;
-      ySpeed = 0;
-      break;
-  }
-};
-
-window.addEventListener("keydown", (e) => {
-  const direction = e.key.replace("Arrow", "");
-  console.log(direction);
-  changeDirection(direction);
-});
+// let previousDirection = "Right";
+// window.addEventListener("keydown", (e) => {
+//   let direction = e.key.replace("Arrow", "");
+//   switch (direction) {
+//     case "Up":
+//       if (direction == "Up" && previousDirection != "Down") {
+//         moveUp();
+//         previousDirection = direction;
+//         break;
+//       }
+//     case "Down":
+//       if (direction == "Down" && previousDirection != "Up") {
+//         moveDown();
+//         previousDirection = direction;
+//         break;
+//       }
+//     case "Left":
+//       if (direction == "Left" && previousDirection != "Right") {
+//         moveLeft();
+//         previousDirection = direction;
+//         break;
+//       }
+//     case "Right":
+//       if (direction == "Right" && previousDirection != "Left") {
+//         moveRight();
+//         previousDirection = direction;
+//         break;
+//       }
+//   }
+// });
