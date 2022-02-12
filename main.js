@@ -12,6 +12,14 @@ canvas.width = 500;
 canvas.height = 500;
 const ctx = canvas.getContext("2d");
 
+// Constructor to track length of snake
+class SnakeTail {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 // Movement
 let speed = 5;
 let xSpeed = 0;
@@ -25,14 +33,20 @@ let columnSize = canvas.width / columns - 5;
 // Snake
 let snakeHeadX = 10;
 let snakeHeadY = 10;
-let snakeRadius = canvas.width / columns - 10;
-let snakeColor = "brown";
+const snakeRadius = canvas.width / columns - 10;
+const snakeColor = "brown";
+
+// Set up an array to contain tail segments
+let tail = [];
+let tailLength = 2;
+const tailRadius = snakeRadius - 2;
+const tailColor = "red";
 
 // Fruit
 let appleX = 5;
 let appleY = 5;
-let appleColor = "green";
-let appleRadius = snakeRadius / 2;
+const appleColor = "green";
+const appleRadius = snakeRadius / 2;
 
 // Play game function
 function playGame() {
@@ -57,19 +71,44 @@ function clear() {
 }
 
 function snake() {
-  ctx.beginPath();
-  ctx.fillStyle = snakeColor;
-  ctx.strokeStyle = snakeColor;
-  ctx.arc(
-    snakeHeadX * columns,
-    snakeHeadY * columns,
-    snakeRadius,
-    0,
-    2 * Math.PI
-  );
-  ctx.fill();
-  ctx.stroke();
-  ctx.closePath();
+  // Draw tail parts first
+  for (let i = 0; i < tail.length; i++) {
+    let tailPart = tail[i];
+    ctx.beginPath();
+    ctx.fillStyle = tailColor;
+    ctx.strokeStyle = tailColor;
+    ctx.arc(
+      tailPart.x * columns,
+      tailPart.y * columns,
+      snakeRadius,
+      0,
+      2 * Math.PI
+    );
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    // Draw Snake
+    ctx.beginPath();
+    ctx.fillStyle = snakeColor;
+    ctx.strokeStyle = snakeColor;
+    ctx.arc(
+      snakeHeadX * columns,
+      snakeHeadY * columns,
+      snakeRadius,
+      0,
+      2 * Math.PI
+    );
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+  }
+  // Push tail onto snake head
+  tail.push(new SnakeTail(snakeHeadX, snakeHeadY));
+  while (tail.length > tailLength) {
+    // remove the last tail part if tail > tailLength
+    tail.shift();
+  }
 }
 
 function apple() {
@@ -82,10 +121,12 @@ function apple() {
   ctx.closePath();
 }
 
+// Check for collision detection with apples
 function appleCollision() {
   if (appleX === snakeHeadX && appleY === snakeHeadY) {
     appleX = getRandomNum(1, columns - 5);
     appleY = getRandomNum(1, columns - 5);
+    tailLength++;
   }
 }
 
