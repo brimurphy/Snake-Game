@@ -16,20 +16,25 @@ const ctx = canvas.getContext("2d");
 let speed = 5;
 let xSpeed = 0;
 let ySpeed = 0;
+let previousDirection = "";
 
 // Layout of playing area
-let columns = 20;
+let columns = 25;
 let columnSize = canvas.width / columns - 5;
 
 // Snake
-let snakeHeadX = 5;
-let snakeHeadY = 5;
+let snakeHeadX = 10;
+let snakeHeadY = 10;
 let snakeRadius = canvas.width / columns - 10;
 let snakeColor = "brown";
 
 function playGame() {
+  // Clear previous position of snake
   clear();
+  // Draw snake
   snake();
+  // Move snake
+  move();
   // Set speed of snake
   setTimeout(playGame, 1000 / speed);
 }
@@ -53,6 +58,94 @@ function snake() {
   ctx.fill();
   ctx.stroke();
 }
+
+function move() {
+  snakeHeadX = snakeHeadX + xSpeed;
+  snakeHeadY = snakeHeadY + ySpeed;
+}
+
+function direction(e) {
+  // Replace the key name Arrow with "" of event to return a direction
+  let direction = e.key.replace("Arrow", "");
+  // Switch statement to call directional movement functions and to
+  // stop snake turning back on itself
+  switch (direction) {
+    case "Up":
+      if (direction == "Up" && previousDirection != "Down") {
+        moveUp();
+        previousDirection = direction;
+        break;
+      }
+    case "Down":
+      if (direction == "Down" && previousDirection != "Up") {
+        moveDown();
+        previousDirection = direction;
+        break;
+      }
+    case "Left":
+      if (direction == "Left" && previousDirection != "Right") {
+        moveLeft();
+        previousDirection = direction;
+        break;
+      }
+    case "Right":
+      if (direction == "Right" && previousDirection != "Left") {
+        moveRight();
+        previousDirection = direction;
+        break;
+      }
+  }
+}
+
+let moveUp = function () {
+  xSpeed = 0;
+  ySpeed -= 1;
+};
+let moveDown = function () {
+  xSpeed = 0;
+  ySpeed += 1;
+};
+let moveLeft = function () {
+  xSpeed -= 1;
+  ySpeed = 0;
+};
+let moveRight = function () {
+  xSpeed += 1;
+  ySpeed = 0;
+};
+
+// Add event listener to body for keypad directions
+document.body.addEventListener("keydown", direction);
+
+// window.addEventListener("keydown", (e) => {
+//   let direction = e.key.replace("Arrow", "");
+//   switch (direction) {
+//     case "Up":
+//       if (direction == "Up" && previousDirection != "Down") {
+//         moveUp();
+//         previousDirection = direction;
+//         break;
+//       }
+//     case "Down":
+//       if (direction == "Down" && previousDirection != "Up") {
+//         moveDown();
+//         previousDirection = direction;
+//         break;
+//       }
+//     case "Left":
+//       if (direction == "Left" && previousDirection != "Right") {
+//         moveLeft();
+//         previousDirection = direction;
+//         break;
+//       }
+//     case "Right":
+//       if (direction == "Right" && previousDirection != "Left") {
+//         moveRight();
+//         previousDirection = direction;
+//         break;
+//       }
+//   }
+// });
 
 playGame();
 
@@ -127,34 +220,3 @@ playGame();
 // let moveRight = function () {
 //   snake.xSpeed += 1;
 // };
-
-// let previousDirection = "Right";
-// window.addEventListener("keydown", (e) => {
-//   let direction = e.key.replace("Arrow", "");
-//   switch (direction) {
-//     case "Up":
-//       if (direction == "Up" && previousDirection != "Down") {
-//         moveUp();
-//         previousDirection = direction;
-//         break;
-//       }
-//     case "Down":
-//       if (direction == "Down" && previousDirection != "Up") {
-//         moveDown();
-//         previousDirection = direction;
-//         break;
-//       }
-//     case "Left":
-//       if (direction == "Left" && previousDirection != "Right") {
-//         moveLeft();
-//         previousDirection = direction;
-//         break;
-//       }
-//     case "Right":
-//       if (direction == "Right" && previousDirection != "Left") {
-//         moveRight();
-//         previousDirection = direction;
-//         break;
-//       }
-//   }
-// });
