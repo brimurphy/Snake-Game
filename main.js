@@ -12,7 +12,7 @@ canvas.width = 500;
 canvas.height = 500;
 const ctx = canvas.getContext("2d");
 
-// Constructor to track length of snake
+// Constructor to build length of snake
 class SnakeTail {
   constructor(x, y) {
     this.x = x;
@@ -20,7 +20,7 @@ class SnakeTail {
   }
 }
 
-// Movement
+// Movement for snake
 let speed = 5;
 let xSpeed = 0;
 let ySpeed = 0;
@@ -36,6 +36,7 @@ let snakeHeadY = 10;
 const snakeRadius = canvas.width / columns - 10;
 const snakeColor = "brown";
 
+// Tail
 // Set up an array to contain tail segments
 let tail = [];
 let tailLength = 2;
@@ -47,6 +48,11 @@ let appleX = 5;
 let appleY = 5;
 const appleColor = "green";
 const appleRadius = snakeRadius / 2;
+
+// Score
+let scoreboard = document.getElementById("scoreboard");
+let score = 0;
+console.log(scoreboard);
 
 // Play game function
 function playGame() {
@@ -127,6 +133,9 @@ function appleCollision() {
     appleX = getRandomNum(1, columns - 5);
     appleY = getRandomNum(1, columns - 5);
     tailLength++;
+    // Update score and scoreboard
+    score++;
+    scoreboard.innerHTML = score;
   }
 }
 
