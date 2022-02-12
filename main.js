@@ -28,13 +28,24 @@ let snakeHeadY = 10;
 let snakeRadius = canvas.width / columns - 10;
 let snakeColor = "brown";
 
+// Fruit
+let appleX = 5;
+let appleY = 5;
+let appleColor = "green";
+let appleRadius = snakeRadius / 2;
+
+// Play game function
 function playGame() {
   // Clear previous position of snake
   clear();
-  // Draw snake
-  snake();
   // Move snake
   move();
+  // Check for collecting fruit
+  appleCollision();
+  // Draw snake
+  snake();
+  // Draw fruit
+  apple();
   // Set speed of snake
   setTimeout(playGame, 1000 / speed);
 }
@@ -46,6 +57,7 @@ function clear() {
 }
 
 function snake() {
+  ctx.beginPath();
   ctx.fillStyle = snakeColor;
   ctx.strokeStyle = snakeColor;
   ctx.arc(
@@ -57,8 +69,34 @@ function snake() {
   );
   ctx.fill();
   ctx.stroke();
+  ctx.closePath();
 }
 
+function apple() {
+  ctx.beginPath();
+  ctx.fillStyle = appleColor;
+  ctx.strokeStyle = appleColor;
+  ctx.arc(appleX * columns, appleY * columns, appleRadius, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.stroke();
+  ctx.closePath();
+}
+
+function appleCollision() {
+  if (appleX === snakeHeadX && appleY === snakeHeadY) {
+    appleX = getRandomNum(1, columns - 5);
+    appleY = getRandomNum(1, columns - 5);
+  }
+}
+
+// Generate a random number between to values, inclusive
+let getRandomNum = function (min, max) {
+  let randomNum = Math.floor(Math.random() * (max - min) + min);
+  console.log(randomNum);
+  return randomNum;
+};
+
+//
 function move() {
   snakeHeadX = snakeHeadX + xSpeed;
   snakeHeadY = snakeHeadY + ySpeed;
@@ -97,6 +135,7 @@ function direction(e) {
   }
 }
 
+// Change direction / increase speed functions
 let moveUp = function () {
   xSpeed = 0;
   ySpeed -= 1;
@@ -116,36 +155,6 @@ let moveRight = function () {
 
 // Add event listener to body for keypad directions
 document.body.addEventListener("keydown", direction);
-
-// window.addEventListener("keydown", (e) => {
-//   let direction = e.key.replace("Arrow", "");
-//   switch (direction) {
-//     case "Up":
-//       if (direction == "Up" && previousDirection != "Down") {
-//         moveUp();
-//         previousDirection = direction;
-//         break;
-//       }
-//     case "Down":
-//       if (direction == "Down" && previousDirection != "Up") {
-//         moveDown();
-//         previousDirection = direction;
-//         break;
-//       }
-//     case "Left":
-//       if (direction == "Left" && previousDirection != "Right") {
-//         moveLeft();
-//         previousDirection = direction;
-//         break;
-//       }
-//     case "Right":
-//       if (direction == "Right" && previousDirection != "Left") {
-//         moveRight();
-//         previousDirection = direction;
-//         break;
-//       }
-//   }
-// });
 
 playGame();
 
@@ -206,17 +215,4 @@ playGame();
 // let getRandomNum = function (min, max) {
 //   let randomNum = Math.floor(Math.random() * (max - min + 1) + min);
 //   return randomNum;
-// };
-
-// let moveUp = function () {
-//   snake.ySpeed -= 1;
-// };
-// let moveDown = function () {
-//   snake.ySpeed += 1;
-// };
-// let moveLeft = function () {
-//   snake.xSpeed -= 1;
-// };
-// let moveRight = function () {
-//   snake.xSpeed += 1;
 // };
