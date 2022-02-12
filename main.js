@@ -6,10 +6,13 @@
 // eat function
 // score function
 // crash/end game function
+const intro = document.getElementById("intro");
+const game = document.getElementById("game");
+const endGame = document.getElementById("game-over");
 
 const canvas = document.getElementById("myCanvas");
-canvas.width = 500;
-canvas.height = 500;
+canvas.width = 400;
+canvas.height = 400;
 const ctx = canvas.getContext("2d");
 
 // Constructor to build length of snake
@@ -27,8 +30,8 @@ let ySpeed = 0;
 let previousDirection = "";
 
 // Layout of playing area
-let columns = 25;
-let columnSize = canvas.width / columns - 5;
+let columns = 20;
+let columnSize = canvas.width / columns - 2;
 
 // Snake
 let snakeHeadX = 10;
@@ -47,19 +50,32 @@ const tailColor = "red";
 let appleX = 5;
 let appleY = 5;
 const appleColor = "green";
-const appleRadius = snakeRadius / 2;
+const appleRadius = snakeRadius / 1.5;
 
 // Score
 let scoreboard = document.getElementById("scoreboard");
 let score = 0;
-console.log(scoreboard);
 
 // Play game function
 function playGame() {
-  // Clear previous position of snake
-  clear();
+  intro.setAttribute("style", "display: none;");
+  game.setAttribute("style", "display: block;");
+  endGame.setAttribute("style", "display: none;");
   // Move snake
   move();
+
+  // Check if game is over
+  let gameStatus = isGameOver();
+  if (gameStatus) {
+    intro.setAttribute("style", "display: none;");
+    game.setAttribute("style", "display: none;");
+    endGame.setAttribute("style", "display: block;");
+    endGame.innerHTML = `<p>You scored ${score}! <br>Try beat your score</p>
+    <button onclick="playAgain()">Play again</button>`;
+    return;
+  }
+  // Clear previous position of snake
+  clear();
   // Check for collecting fruit
   appleCollision();
   // Draw snake
@@ -68,6 +84,37 @@ function playGame() {
   apple();
   // Set speed of snake
   setTimeout(playGame, 1000 / speed);
+}
+
+function isGameOver() {
+  let gameOver = false;
+
+  // Check if game has started
+  if (xSpeed == 0 && ySpeed == 0) {
+    return false;
+  }
+
+  // Check for wall collision
+  if (snakeHeadX < 0) {
+    gameOver = true;
+  } else if (snakeHeadX > columns) {
+    gameOver = true;
+  } else if (snakeHeadY < 0) {
+    gameOver = true;
+  } else if (snakeHeadY > columns) {
+    gameOver = true;
+  }
+
+  // Check for colloision on snake parts
+  for (let i = 0; i < tail.length; i++) {
+    let tailPart = tail[i];
+    if (tailPart.x == snakeHeadX && tailPart.y == snakeHeadY) {
+      gameOver = true;
+      break;
+    }
+  }
+
+  return gameOver;
 }
 
 function clear() {
@@ -139,19 +186,27 @@ function appleCollision() {
   }
 }
 
+function playAgain() {
+  document.location.reload();
+  intro.setAttribute("style", "display: block;");
+  game.setAttribute("style", "display: none;");
+  endGame.setAttribute("style", "display: none;");
+}
+
 // Generate a random number between to values, inclusive
 let getRandomNum = function (min, max) {
   let randomNum = Math.floor(Math.random() * (max - min) + min);
-  console.log(randomNum);
+
   return randomNum;
 };
 
-//
+// Move snake function
 function move() {
   snakeHeadX = snakeHeadX + xSpeed;
   snakeHeadY = snakeHeadY + ySpeed;
 }
 
+// Determine what direction to move the snake
 function direction(e) {
   // Replace the key name Arrow with "" of event to return a direction
   let direction = e.key.replace("Arrow", "");
@@ -205,8 +260,6 @@ let moveRight = function () {
 
 // Add event listener to body for keypad directions
 document.body.addEventListener("keydown", direction);
-
-playGame();
 
 // // Start A new game
 // let startGame = function () {
