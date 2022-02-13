@@ -11,7 +11,7 @@
         padding: 0;
         margin: 0;
       }
-      
+
       body {
         font-size: 18px;
         background-color: aquamarine;
@@ -21,7 +21,8 @@
         align-items: center;
       }
 
-      h1, #game-over h2 {
+      h1,
+      #game-over h2 {
         margin: 20px;
       }
 
@@ -51,18 +52,23 @@
       }
 
       /* Set Intro the same size as the canvas */
-      #intro, #game-over {
+      #intro,
+      #game-over {
         height: 400px;
         width: 400px;
       }
 
-      #game, #game-over {
+      #game,
+      #game-over {
         display: none;
       }
     </style>
   </head>
+
   <body>
     <h1>Snake Game</h1>
+
+    <!-- Intro -->
     <section id="intro">
       <p>
         Use the Up, Down, Left and right arrows to control the snake.<br />
@@ -71,16 +77,18 @@
       </p>
       <button onclick="playGame()">Start Game</button>
     </section>
+
+    <!-- Game area -->
     <section id="game">
       <canvas id="myCanvas"></canvas>
       <div>Score: <span id="scoreboard">0</span></div>
     </section>
+
+    <!-- Game Over Screen -->
     <section id="game-over">
       <h2>Game Over!</h2>
-      <p>
-      </p>
+      <p></p>
       <button onclick="playAgain()">Continue</button>
-    </section>
     </section>
 
     <script src="main.js"></script>
