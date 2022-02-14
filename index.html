@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Snake Game</title>
+    <!-- CSS styles -->
     <style>
       /* Remove any browser default padding and margin */
       * {
@@ -35,7 +35,7 @@
         border-radius: 5px;
       }
 
-      /* Center the paragraph text */
+      /* Position the paragraph text */
       p {
         margin-top: 147px;
         margin-left: 20px;
@@ -58,11 +58,14 @@
         width: 400px;
       }
 
+      /* Hide game and game-over sections by default */
       #game,
       #game-over {
         display: none;
       }
     </style>
+
+    <title>Snake Game</title>
   </head>
 
   <body>
@@ -71,7 +74,7 @@
     <!-- Intro -->
     <section id="intro">
       <p>
-        Use the Up, Down, Left and right arrows to control the snake.<br />
+        Use the Up, Down, Left and Right arrows to control the snake.<br />
         If you crash into the walls or hit yourself the game is over.
         <br />Press the start game button to start.
       </p>

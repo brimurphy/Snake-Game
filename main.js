@@ -117,12 +117,14 @@ function isGameOver() {
   return gameOver;
 }
 
+// Clear screen when snake moves to clear previous position
 function clear() {
   ctx.beginPath();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.closePath();
 }
 
+// Draw snake function
 function snake() {
   // Draw tail parts first
   for (let i = 0; i < tail.length; i++) {
@@ -133,7 +135,7 @@ function snake() {
     ctx.arc(
       tailPart.x * columns,
       tailPart.y * columns,
-      snakeRadius,
+      tailRadius,
       0,
       2 * Math.PI
     );
@@ -141,7 +143,7 @@ function snake() {
     ctx.stroke();
     ctx.closePath();
 
-    // Draw Snake
+    // Draw Snake head
     ctx.beginPath();
     ctx.fillStyle = snakeColor;
     ctx.strokeStyle = snakeColor;
@@ -164,6 +166,7 @@ function snake() {
   }
 }
 
+// Function to draw the fruit
 function apple() {
   ctx.beginPath();
   ctx.fillStyle = appleColor;
@@ -176,16 +179,19 @@ function apple() {
 
 // Check for collision detection with apples
 function appleCollision() {
+  // If x positions and y positions match increase the tail length
   if (appleX === snakeHeadX && appleY === snakeHeadY) {
     appleX = getRandomNum(1, columns - 5);
     appleY = getRandomNum(1, columns - 5);
     tailLength++;
+
     // Update score and scoreboard
     score++;
     scoreboard.innerHTML = score;
   }
 }
 
+// Function to reload page and reset attribute to restart game
 function playAgain() {
   document.location.reload();
   intro.setAttribute("style", "display: block;");
@@ -208,10 +214,10 @@ function move() {
 
 // Determine what direction to move the snake
 function direction(e) {
-  // Replace the key name Arrow with "" of event to return a direction
+  // Replace Arrow in the key name "" and store the direction only
   let direction = e.key.replace("Arrow", "");
   // Switch statement to call directional movement functions and to
-  // stop snake turning back on itself
+  // stop snake turning back on itself (e.g: if up can't go down)
   switch (direction) {
     case "Up":
       if (direction == "Up" && previousDirection != "Down") {
@@ -260,62 +266,3 @@ let moveRight = function () {
 
 // Add event listener to body for keypad directions
 document.body.addEventListener("keydown", direction);
-
-// // Start A new game
-// let startGame = function () {
-//   snake = new snake(100, 75, 15, "brown");
-//   myGame.start();
-// };
-
-// // Create a new game object
-// const myGame = {
-//   canvas: document.createElement("canvas"),
-//   container: document.querySelector(".container"),
-//   start: function () {
-//     this.canvas.width = 400;
-//     this.canvas.height = 400;
-//     this.ctx = this.canvas.getContext("2d");
-//     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-//     this.container.setAttribute("style", "display: none;");
-//     this.interval = setInterval(movement, 20);
-//   },
-//   // Clear previous position of the snake
-//   clear: function () {
-//     this.ctx.beginPath();
-//     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-//     this.ctx.closePath();
-//   },
-// };
-
-// // Create a snake constructor object
-// function snake(x, y, radius, color) {
-//   this.x = x;
-//   this.y = y;
-//   this.color = color;
-//   this.radius = radius;
-//   this.xSpeed = 0;
-//   this.ySpeed = 0;
-//   // this.move = function () {
-//   ctx = myGame.ctx;
-//   ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-//   ctx.fillStyle = this.color;
-//   ctx.stroke();
-//   // };
-//   this.newPos = function () {
-//     this.x += this.speedX;
-//     this.y += this.speedY;
-//   };
-// }
-
-// // Add movement to object
-// let movement = function () {
-//   // Clear the last position of the object
-//   myGame.clear();
-//   snake.newPos();
-//   // snake.move();
-// };
-// // Generate a random number between to values, inclusive
-// let getRandomNum = function (min, max) {
-//   let randomNum = Math.floor(Math.random() * (max - min + 1) + min);
-//   return randomNum;
-// };
