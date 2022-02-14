@@ -1,11 +1,3 @@
-// To-do list
-// Draw objects apples + snake
-// Start game function
-// Movement function
-// speed function
-// eat function
-// score function
-// crash/end game function
 const intro = document.getElementById("intro");
 const game = document.getElementById("game");
 const endGame = document.getElementById("game-over");
